@@ -9,7 +9,7 @@
     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.8.5/dist/aframe-extras.min.js"></script>
 </head>
 <body>
-    <a-scene>
+    <a-scene physics>
       <!--<a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
@@ -22,20 +22,27 @@
               position="0 1.8 0">
     </a-entity>
 
-    <a-entity id="walls"></a-entity>
+    <a-entity id="walls">
+         <a-box id="testBox" position="-1 4 -3" rotation="0 45 0" color="#4CC3D9" dynamic-body></a-box>
+         <a-sphere id="ball" position="-1 5 5"  radius="1.25" color="blue" dynamic-body></a-sphere>
+    </a-entity>
 
-    <a-grid id="ground" static-body></a-grid>
+    <a-grid id="ground" static-body src="img/ground.jpg">
 
-    <a-sky id="sky" color="#AADDF0"></a-sky>
+    </a-grid>
+  
+
+    <a-sky id="sky" src="img/sky.jpg"></a-sky>
 
     <!-- Lighting -->
     <a-light type="ambient" color="#ccc"></a-light>
     </a-scene>
     <script>
+        var player = document.querySelector('#player');
          document.querySelector('a-scene').addEventListener('render-target-loaded', function () {
             var MAP_SIZE = 10,
                     PLATFORM_SIZE = 5,
-                    NUM_PLATFORMS = 50;
+                    NUM_PLATFORMS = 100;
             var platformsEl = document.querySelector('#walls');
             var v, box;
             for (var i = 0;  i < NUM_PLATFORMS; i++) {
@@ -47,15 +54,29 @@
                 };
                 box = document.createElement('a-box');
                 platformsEl.appendChild(box);
-                box.setAttribute('color', 'black');
+                // box.setAttribute('color', 'black');
+                box.setAttribute('src','img/whiteWall.jpg');
                 box.setAttribute('width', PLATFORM_SIZE);
                 box.setAttribute('height', PLATFORM_SIZE);
                 box.setAttribute('depth', PLATFORM_SIZE);
                 box.setAttribute('position', v.x + ' ' + v.y + ' ' + v.z);
                 box.setAttribute('static-body', '');
+                // console.log(box,'box');
             }
             console.info('Platforms loaded.');
+            
         });
+        // console.log(player,'player');
+        document.addEventListener('keydown',function(e){
+            console.log(e.keyCode,'currentDown');
+             var playerPosition = player.getAttribute('position');
+            if(e.keyCode == 32){
+                player.setAttribute('position',playerPosition.x+ ' '+10+' '+playerPosition.z);
+                console.log(playerPosition,'position');
+            }
+
+        });
+        console.log(player.getAttribute('*'),'player');
     </script>
 </body>
 </html>
